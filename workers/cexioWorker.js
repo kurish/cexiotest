@@ -20,19 +20,21 @@ init = () => {
     } catch (e) {
         console.log('webSocket error: ', e);
     }
-
 }
 
 checkData = (data) => {
     try {
-        if (data.symbol1 === config.crypto && data.symbol1 === config.currency) {
-            eventEmitter.emit('newPrice', data.price);
+        if (data && data.symbol1 === config.crypto && data.symbol2 === config.currency) {
+            eventEmitter.emit('newPrice', data.price || null);
+        } else {
+            return null;
         }
     } catch (e) {
-        console.log('check cexio data error: ', e);
+        console.log('check data error: ', e);
     }
 }
 
 
 module.exports.init = init;
 module.exports.eventEmitter = eventEmitter;
+module.exports.checkData = checkData;

@@ -8,18 +8,16 @@ const priceWorker = require('./workers/priceWorker');
 const logger = require('./workers/logger');
 const config = require('./config');
 
-let btcUsdCoinmarket = 0;
-let btcUsdCexio = 0;
-
-let priceDiffPercentage = 0;
+let info = {
+    btcUsdCoinmarket: 0,
+    btcUsdCexio: 0,
+    priceDiffPercentage: 0
+};
 
 //get/update coinmarket btc price
 setInterval(() => {
     coinmarketWorker.getBitcoinCost().then((cost) => {
-        if (cost && cost !== 0) {
-            btcUsdCoinmarket = cost;
-            checkAndLog();
-        }
+        setPrice(cost, 'btcUsdCoinmarket');
     }).catch(() => {
         console.log('Coinmarket error');
     });
@@ -27,17 +25,29 @@ setInterval(() => {
 
 //update cexio btc price
 cexioWorker.init();
-cexioWorker.eventEmitter.on('newPrice', (price) => {
-    if (price && price !== 0) {
-        btcUsdCexio = price;
-        checkAndLog();
-    }
+cexioWorker.eventEmitter.on('newPrice', (cost) => {
+    setPrice(cost, 'btcUsdCexio');
 });
 
 checkAndLog = () => {
-    const percent = priceWorker.getPercent(btcUsdCexio, btcUsdCoinmarket);
-    if (percent && (percent !== priceDiffPercentage)) {
-        priceDiffPercentage = percent;
-        logger.sendMessage(priceDiffPercentage);
+    const percent = priceWorker.getPercent(info.btcUsdCexio, info.btcUsdCoinmarket);
+    if (percent && (percent !== info.priceDiffPercentage)) {
+        info.priceDiffPercentage = percent;
+        logger.sendMessage(info.priceDiffPercentage);
     }
 }
+
+setPrice = (cost, market) => {
+    try {
+        if (cost && cost !== 0) {
+            info[market] = cost;
+            checkAndLog();
+        }
+    } catch (e) {
+        return 'no such market';
+    }
+}
+
+module.exports.setPrice = setPrice;
+exports.info = info;
+
