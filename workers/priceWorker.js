@@ -6,7 +6,7 @@ getPercent = (cex, coinmarket) => {
             return null;
         }
         let coinmarketPercent = 0;
-        coinmarketPercent = (coinmarket * 100 / cex - 100).toFixed(config.accuracy);
+        coinmarketPercent = (cex * 100 / coinmarket - 100).toFixed(config.accuracy);
         return coinmarketPercent;
     } catch (e) {
         return null;
