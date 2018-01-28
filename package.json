@@ -1,0 +1,17 @@
+{
+  "name": "cexio",
+  "version": "1.0.0",
+  "description": "Do",
+  "main": "app.js",
+  "author": "Yuri",
+  "private": false,
+  "dependencies": {
+    "EventEmitter": "^1.0.0",
+    "body-parser": "1.15.2",
+    "express": "^4.16.2",
+    "moment": "^2.20.1",
+    "q": "^1.5.1",
+    "request": "^2.83.0",
+    "ws": "^4.0.0"
+  }
+}
