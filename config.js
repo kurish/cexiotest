@@ -1,4 +1,4 @@
-exports.coinmarketUpdate = 1 * 1000;
+exports.coinmarketUpdate = 10 * 1000;
 
 exports.bitcoinCostURL = 'https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=USD';
 
